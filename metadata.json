@@ -1,0 +1,5 @@
+{
+  "name": "Electrical Consumption Reporter",
+  "description": "An application to automate the daily electrical consumption reporting process, replacing a manual workflow with a digital interface for data entry, reporting, and analysis.",
+  "requestFramePermissions": []
+}

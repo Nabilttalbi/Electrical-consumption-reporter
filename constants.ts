@@ -1,0 +1,25 @@
+import { Tag } from './types';
+
+export const TAG_MATRIX: Tag[] = [
+  { id: 'MCC REF', name: 'MCC REF', area: 'Refinery' },
+  { id: 'EHT-1', name: 'EHT-1', area: 'Refinery' },
+  { id: 'EHT-2', name: 'EHT-2', area: 'Refinery' },
+  { id: 'EHT-4', name: 'EHT-4', area: 'Refinery' },
+  { id: 'EHT-5', name: 'EHT-5', area: 'Refinery' },
+  { id: 'PDB 2', name: 'PDB 2', area: 'Refinery' },
+  { id: 'MCC HYD', name: 'MCC HYD', area: 'Hydrogination' },
+  { id: 'EHT-HYD', name: 'EHT-HYD', area: 'Hydrogination' },
+  { id: 'PDB 3', name: 'PDB 3', area: 'Hydrogination' },
+  { id: 'MAR-MCC 05 PANEL', name: 'MAR-MCC 05 PANEL', area: 'Shortenning and Margarin' },
+  { id: 'MCC-TF', name: 'MCC-TF', area: 'Tank Farm' },
+  { id: 'EHT-3', name: 'EHT-3', area: 'Tank Farm' },
+  { id: 'MCC-ETP', name: 'MCC-ETP', area: 'ETP' },
+  { id: 'PDB 4', name: 'PDB 4', area: 'Packing' },
+  { id: 'PDB 5', name: 'PDB 5', area: 'Administration' },
+  { id: 'MLDB', name: 'MLDB', area: 'Administration' },
+  { id: 'PDB 1', name: 'PDB 1', area: 'Administration' },
+  { id: 'FIRE WATER PUMPS', name: 'FIRE WATER PUMPS', area: 'Fire Water' },
+  { id: 'EHT PDB', name: 'EHT PDB', area: 'EHT' },
+  { id: 'AGBT 1', name: 'AGBT 1', area: 'AGBT' },
+  { id: 'AGBT 2', name: 'AGBT 2', area: 'AGBT' },
+];
