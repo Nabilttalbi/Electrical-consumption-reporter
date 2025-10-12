@@ -18,7 +18,7 @@ export const TAG_MATRIX: Tag[] = [
   { id: 'PDB 5', name: 'PDB 5', area: 'Administration' },
   { id: 'MLDB', name: 'MLDB', area: 'Administration' },
   { id: 'PDB 1', name: 'PDB 1', area: 'Administration' },
-  { id: 'FIRE WATER PUMPS', name: 'FIRE WATER PUMPS', area: 'Fire Water' },
+  { id: 'Fire Water Pumps', name: 'Fire Water Pumps', area: 'Fire Water' },
   { id: 'EHT PDB', name: 'EHT PDB', area: 'EHT' },
   { id: 'AGBT 1', name: 'AGBT 1', area: 'AGBT' },
   { id: 'AGBT 2', name: 'AGBT 2', area: 'AGBT' },
