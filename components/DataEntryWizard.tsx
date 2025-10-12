@@ -85,7 +85,7 @@ const DataEntryWizard: React.FC<DataEntryWizardProps> = ({
             type="button"
             onClick={onPrevious}
             disabled={currentIndex === 0}
-            className="flex-1 flex justify-center py-3 px-4 border border-slate-300 rounded-md shadow-sm text-base font-medium text-slate-700 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="py-2 px-6 border border-slate-300 rounded-md shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Previous
           </button>
@@ -93,7 +93,7 @@ const DataEntryWizard: React.FC<DataEntryWizardProps> = ({
           <button
             type="submit"
             disabled={!!successMessage || !currentKwhValue}
-            className="flex-1 flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-brand-secondary hover:bg-brand-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-secondary transition-colors disabled:bg-green-500 disabled:cursor-not-allowed"
+            className="w-1/2 flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-brand-secondary hover:bg-brand-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-secondary transition-colors disabled:bg-green-500 disabled:cursor-not-allowed"
           >
             {successMessage ? 'Submitted!' : 'Submit'}
           </button>
@@ -102,7 +102,7 @@ const DataEntryWizard: React.FC<DataEntryWizardProps> = ({
             type="button"
             onClick={onNext}
             disabled={currentIndex === totalTags - 1}
-            className="flex-1 flex justify-center py-3 px-4 border border-slate-300 rounded-md shadow-sm text-base font-medium text-slate-700 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="py-2 px-6 border border-slate-300 rounded-md shadow-sm text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             Next
           </button>

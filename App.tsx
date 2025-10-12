@@ -128,7 +128,7 @@ const App: React.FC = () => {
   const currentKwhValue = sessionReadings[currentTag.id] ?? readings.find(r => r.tagId === currentTag.id)?.kwh.toString() ?? '';
 
   return (
-    <div className="min-h-screen bg-brand-light text-brand-dark">
+    <div className="min-h-screen bg-brand-light text-brand-dark pb-20 sm:pb-0">
       <Header 
         operatorName={operatorName}
         viewMode={viewMode}
@@ -156,6 +156,16 @@ const App: React.FC = () => {
           </div>
         )}
       </main>
+
+      {/* Mobile-only View Switcher Button */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-brand-light p-4 border-t border-slate-200 shadow-lg">
+          <button
+            onClick={handleToggleView}
+            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-brand-secondary hover:bg-brand-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary transition-colors"
+          >
+            {viewMode === 'entry' ? 'View Report' : 'Back to Entry'}
+          </button>
+      </div>
     </div>
   );
 };
