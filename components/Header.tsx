@@ -31,15 +31,15 @@ const Header: React.FC<HeaderProps> = ({ operatorName, viewMode, onToggleView, o
 
           {/* Right: Controls */}
           <div className="flex items-center space-x-2">
-             <button
+            <button
               onClick={onToggleView}
-              className="hidden sm:block px-3 py-2 border border-transparent text-sm font-medium rounded-md text-brand-primary bg-brand-light hover:brightness-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-secondary transition"
+              className="px-4 py-2 rounded bg-brand-secondary text-white font-semibold hover:bg-brand-primary transition-colors"
             >
               {viewMode === 'entry' ? 'View Report' : 'Back to Entry'}
             </button>
             <button
               onClick={onLogout}
-              className="px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition"
+              className="px-4 py-2 rounded bg-red-500 text-white font-semibold hover:bg-red-600 transition-colors"
             >
               Logout
             </button>
