@@ -152,6 +152,7 @@ const App: React.FC = () => {
             <FinanceReport
               readings={readings}
               tags={TAG_MATRIX}
+              operatorName={operatorName ?? ''}
             />
           </div>
         )}
