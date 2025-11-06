@@ -26,6 +26,7 @@ const cellMap: Record<string, string> = {
   'MAR-MCC 05 PANEL': 'F17',
   'MCC-TF': 'F19',
   'EHT-3': 'F20',
+  'MCC-ETP': 'F24',
   'PDB 4': 'F26',
   'PDB 3': 'F28',
   'PDB 5': 'F30',
@@ -49,20 +50,36 @@ const FinanceReport: React.FC<FinanceReportProps> = ({
     const buildReplacements = () => {
       const replacements: Record<string, string | number> = {};
       const dateStr = new Date().toISOString().split('T')[0];
-      
-      // Remplir la date et l'opérateur
       replacements[cellMap.DATE] = dateStr;
       replacements[cellMap.OPERATOR] = operatorName || '';
 
-      // Créer une map pour un accès rapide aux relevés par tagId
-      const mapByTag = new Map(readings.map(r => [r.tagId, r.kwh ?? 0]));
+      // Debug: vérifier la structure des readings et les clés
+      console.log('readings:', readings);
+      console.log('cellMap keys:', Object.keys(cellMap));
 
-      // Remplir les valeurs kwh
+      // créer map par tagId (assure-toi que tagId correspond bien aux clefs de cellMap)
+      const mapByTag = new Map(readings.map(r => [r.tagId, r.kwh ?? 0]));
+      console.log('mapByTag keys:', Array.from(mapByTag.keys()));
+
       Object.entries(cellMap).forEach(([key, cell]) => {
         if (key === 'DATE' || key === 'OPERATOR') return;
-        const val = mapByTag.get(key) ?? ''; // Mettre une chaîne vide si pas de valeur
-        replacements[cell] = val;
+        // tolérance: supporte aussi correspondance par name si nécessaire
+        let val = mapByTag.get(key);
+        if (val === undefined) {
+          // essai par tag name (si readings utilisent un id différent)
+          const found = readings.find(r => {
+            // compare insensible à la casse et sans tirets/espaces
+            const normalize = (s: string) => s?.toString().toLowerCase().replace(/[\s-]/g, '');
+            return normalize(r.tagId) === normalize(key) || normalize((r as any).tagName || '') === normalize(key);
+          });
+          val = found ? (found.kwh ?? 0) : '';
+        }
+        const num = typeof val === 'number' ? val : parseFloat(String(val));
+        replacements[cell] = Number.isFinite(num) ? num : (val ?? '');
       });
+
+      // Debug: voir ce qu'on va écrire dans le template
+      console.log('replacements:', replacements);
       return replacements;
     };
 
