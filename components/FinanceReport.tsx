@@ -63,19 +63,18 @@ const FinanceReport: React.FC<FinanceReportProps> = ({
 
       Object.entries(cellMap).forEach(([key, cell]) => {
         if (key === 'DATE' || key === 'OPERATOR') return;
-        // tolérance: supporte aussi correspondance par name si nécessaire
-        let val = mapByTag.get(key);
+        // récupérer la valeur brute (peut être undefined)
+        let val: string | number | undefined = mapByTag.get(key) as unknown as string | number | undefined;
         if (val === undefined) {
-          // essai par tag name (si readings utilisent un id différent)
           const found = readings.find(r => {
-            // compare insensible à la casse et sans tirets/espaces
             const normalize = (s: string) => s?.toString().toLowerCase().replace(/[\s-]/g, '');
             return normalize(r.tagId) === normalize(key) || normalize((r as any).tagName || '') === normalize(key);
           });
           val = found ? (found.kwh ?? 0) : '';
         }
+        // normaliser en nombre si possible sinon en string
         const num = typeof val === 'number' ? val : parseFloat(String(val));
-        replacements[cell] = Number.isFinite(num) ? num : (val ?? '');
+        replacements[cell] = Number.isFinite(num) ? num : String(val ?? '');
       });
 
       // Debug: voir ce qu'on va écrire dans le template
