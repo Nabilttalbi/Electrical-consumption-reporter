@@ -10,6 +10,7 @@ export const TAG_MATRIX: Tag[] = [
   { id: 'MCC HYD', name: 'MCC HYD', area: 'Hydrogination' },
   { id: 'EHT-HYD', name: 'EHT-HYD', area: 'Hydrogination' },
   { id: 'PDB 3', name: 'PDB 3', area: 'Boiler' },
+  { id: 'Chaudière', name: 'Chaudière', area: 'Boiler' },
   { id: 'MAR-MCC 05 PANEL', name: 'MAR-MCC 05 PANEL', area: 'Shortenning and Margarin' },
   { id: 'MCC-TF', name: 'MCC-TF', area: 'Tank Farm' },
   { id: 'EHT-3', name: 'EHT-3', area: 'Tank Farm' },

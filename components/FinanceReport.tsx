@@ -28,7 +28,9 @@ const cellMap: Record<string, string> = {
   'EHT-3': 'F20',
   'MCC-ETP': 'F24',
   'PDB 4': 'F26',
-  'PDB 3': 'F28',
+  // Chaudière -> colonne F28, PDB 3 -> colonne H28
+  'Chaudière': 'F28',
+  'PDB 3': 'H28',
   'PDB 5': 'F30',
   'EHT PDB': 'F34',
   'MLDB': 'F35',
