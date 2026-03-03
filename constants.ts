@@ -23,4 +23,5 @@ export const TAG_MATRIX: Tag[] = [
   { id: 'EHT PDB', name: 'EHT PDB', area: 'EHT' },
   { id: 'AGBT 1', name: 'AGBT 1', area: 'AGBT' },
   { id: 'AGBT 2', name: 'AGBT 2', area: 'AGBT' },
+  { id: 'LYDEC Global', name: 'LYDEC Global', area: 'MT Room' },
 ];
