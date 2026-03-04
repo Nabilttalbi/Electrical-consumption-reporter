@@ -28,16 +28,19 @@ const cellMap: Record<string, string> = {
   'EHT-3': 'F20',
   'MCC-ETP': 'F24',
   'PDB 4': 'F26',
-  // Chaudière -> colonne F28, PDB 3 -> colonne H28
+  // Chaudière -> colonne F28, PDB 3 -> colonne F29 (shifted)
   'Chaudière': 'F28',
-  'PDB 3': 'H28',
-  'PDB 5': 'F30',
-  'EHT PDB': 'F34',
-  'MLDB': 'F35',
-  'PDB 1': 'F36',
-  'Fire Water Pumps': 'F39',
-  'AGBT 1': 'F41',
-  'AGBT 2': 'F42',
+  'PDB 3': 'F29',
+  // shifted administration and downstream mappings
+  'PDB 5': 'F31',
+  'EHT PDB': 'F35',
+  'MLDB': 'F36',
+  'PDB 1': 'F37',
+  'Fire Water Pumps': 'F40',
+  'AGBT 1': 'F42',
+  'AGBT 2': 'F43',
+  // New technician measurement
+  'LYDEC Global': 'F44',
 };
 
 const FinanceReport: React.FC<FinanceReportProps> = ({ 
@@ -55,20 +58,28 @@ const FinanceReport: React.FC<FinanceReportProps> = ({
       replacements[cellMap.DATE] = dateStr;
       replacements[cellMap.OPERATOR] = operatorName || '';
 
+      // Filter readings to only include today's readings
+      const today = new Date().toISOString().split('T')[0];
+      const todaysReadings = readings.filter(r => 
+        new Date(r.timestamp).toISOString().split('T')[0] === today
+      );
+
       // Debug: vérifier la structure des readings et les clés
-      console.log('readings:', readings);
+      console.log('all readings:', readings);
+      console.log('todays readings:', todaysReadings);
       console.log('cellMap keys:', Object.keys(cellMap));
 
       // créer map par tagId (assure-toi que tagId correspond bien aux clefs de cellMap)
-      const mapByTag = new Map(readings.map(r => [r.tagId, r.kwh ?? 0]));
+      const mapByTag = new Map(todaysReadings.map(r => [r.tagId, r.kwh ?? 0]));
       console.log('mapByTag keys:', Array.from(mapByTag.keys()));
+      console.log('mapByTag values:', Array.from(mapByTag.entries()));
 
       Object.entries(cellMap).forEach(([key, cell]) => {
         if (key === 'DATE' || key === 'OPERATOR') return;
         // récupérer la valeur brute (peut être undefined)
         let val: string | number | undefined = mapByTag.get(key) as unknown as string | number | undefined;
         if (val === undefined) {
-          const found = readings.find(r => {
+          const found = todaysReadings.find(r => {
             const normalize = (s: string) => s?.toString().toLowerCase().replace(/[\s-]/g, '');
             return normalize(r.tagId) === normalize(key) || normalize((r as any).tagName || '') === normalize(key);
           });
@@ -77,6 +88,10 @@ const FinanceReport: React.FC<FinanceReportProps> = ({
         // normaliser en nombre si possible sinon en string
         const num = typeof val === 'number' ? val : parseFloat(String(val));
         replacements[cell] = Number.isFinite(num) ? num : String(val ?? '');
+        // Debug specifically for LYDEC Global
+        if (key === 'LYDEC Global') {
+          console.log(`LYDEC Global mapping: key="${key}", cell="${cell}", val="${val}", final value="${replacements[cell]}"`);
+        }
       });
 
       // Debug: voir ce qu'on va écrire dans le template
