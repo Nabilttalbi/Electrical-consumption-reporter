@@ -5,6 +5,7 @@ import Header from './components/Header';
 import LoginScreen from './components/LoginScreen';
 import DataEntryWizard from './components/DataEntryWizard';
 import FinanceReport from './components/FinanceReport';
+import TagOverviewGrid from './components/TagOverviewGrid';
 
 type ViewMode = 'entry' | 'report';
 
@@ -135,18 +136,24 @@ const App: React.FC = () => {
         onToggleView={handleToggleView}
         onLogout={handleLogout}
       />
-      <main className="container mx-auto p-4 flex justify-center items-start pt-10">
+      <main className="container mx-auto p-4 flex justify-center items-start pt-6">
         {viewMode === 'entry' ? (
-          <DataEntryWizard
-            currentTag={currentTag}
-            currentKwhValue={currentKwhValue}
-            onKwhChange={handleSessionReadingChange}
-            onNewReading={handleNewReading}
-            onNext={handleNextTag}
-            onPrevious={handlePreviousTag}
-            currentIndex={currentTagIndex}
-            totalTags={TAG_MATRIX.length}
-          />
+          <div className="w-full max-w-2xl flex flex-col gap-4">
+            <TagOverviewGrid
+              tags={TAG_MATRIX}
+              readings={readings}
+            />
+            <DataEntryWizard
+              currentTag={currentTag}
+              currentKwhValue={currentKwhValue}
+              onKwhChange={handleSessionReadingChange}
+              onNewReading={handleNewReading}
+              onNext={handleNextTag}
+              onPrevious={handlePreviousTag}
+              currentIndex={currentTagIndex}
+              totalTags={TAG_MATRIX.length}
+            />
+          </div>
         ) : (
           <div className="w-full max-w-6xl">
             <FinanceReport

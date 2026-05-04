@@ -1,17 +1,14 @@
 import React from 'react';
 import { Reading, Tag } from '../types';
 import ReportTable from './ReportTable';
-// Assure-toi que le service excelService utilise bien exceljs
 import { generateFromTemplate } from '../services/excelService';
 
 interface FinanceReportProps {
   readings: Reading[];
   tags: Tag[];
-  // Ajout de operatorName pour le passer au template
-  operatorName?: string; 
+  operatorName?: string;
 }
 
-// Le mapping des tags vers les cellules de ton template Excel
 const cellMap: Record<string, string> = {
   DATE: 'G4',
   OPERATOR: 'H4',
@@ -28,10 +25,8 @@ const cellMap: Record<string, string> = {
   'EHT-3': 'F20',
   'MCC-ETP': 'F24',
   'PDB 4': 'F26',
-  // Chaudière -> colonne F28, PDB 3 -> colonne F29 (shifted)
   'Chaudière': 'F28',
   'PDB 3': 'F29',
-  // shifted administration and downstream mappings
   'PDB 5': 'F31',
   'EHT PDB': 'F35',
   'MLDB': 'F36',
@@ -39,70 +34,43 @@ const cellMap: Record<string, string> = {
   'Fire Water Pumps': 'F40',
   'AGBT 1': 'F42',
   'AGBT 2': 'F43',
-  // New technician measurement
   'LYDEC Global': 'F44',
 };
 
-const FinanceReport: React.FC<FinanceReportProps> = ({ 
+const FinanceReport: React.FC<FinanceReportProps> = ({
   readings,
   tags,
-  operatorName = '' // Valeur par défaut
+  operatorName = '',
 }) => {
-
-  // Nouvelle fonction pour télécharger le template Excel rempli
   const handleDownloadSheet = async () => {
-    // Helper pour construire l'objet de remplacements
     const buildReplacements = () => {
       const replacements: Record<string, string | number> = {};
       const dateStr = new Date().toISOString().split('T')[0];
       replacements[cellMap.DATE] = dateStr;
-      replacements[cellMap.OPERATOR] = operatorName || '';
+      replacements[cellMap.OPERATOR] = operatorName;
 
-      // Filter readings to only include today's readings
-      const today = new Date().toISOString().split('T')[0];
-      const todaysReadings = readings.filter(r => 
-        new Date(r.timestamp).toISOString().split('T')[0] === today
+      const todaysReadings = readings.filter(
+        r => new Date(r.timestamp).toISOString().split('T')[0] === dateStr
       );
 
-      // Debug: vérifier la structure des readings et les clés
-      console.log('all readings:', readings);
-      console.log('todays readings:', todaysReadings);
-      console.log('cellMap keys:', Object.keys(cellMap));
-
-      // créer map par tagId (assure-toi que tagId correspond bien aux clefs de cellMap)
-      const mapByTag = new Map(todaysReadings.map(r => [r.tagId, r.kwh ?? 0]));
-      console.log('mapByTag keys:', Array.from(mapByTag.keys()));
-      console.log('mapByTag values:', Array.from(mapByTag.entries()));
+      const tagIdToName = new Map(tags.map(t => [t.id, t.name]));
+      const mapByTagName = new Map(
+        todaysReadings.map(r => [tagIdToName.get(r.tagId) ?? r.tagId, r.kwh ?? 0])
+      );
 
       Object.entries(cellMap).forEach(([key, cell]) => {
         if (key === 'DATE' || key === 'OPERATOR') return;
-        // récupérer la valeur brute (peut être undefined)
-        let val: string | number | undefined = mapByTag.get(key) as unknown as string | number | undefined;
-        if (val === undefined) {
-          const found = todaysReadings.find(r => {
-            const normalize = (s: string) => s?.toString().toLowerCase().replace(/[\s-]/g, '');
-            return normalize(r.tagId) === normalize(key) || normalize((r as any).tagName || '') === normalize(key);
-          });
-          val = found ? (found.kwh ?? 0) : '';
-        }
-        // normaliser en nombre si possible sinon en string
-        const num = typeof val === 'number' ? val : parseFloat(String(val));
-        replacements[cell] = Number.isFinite(num) ? num : String(val ?? '');
-        // Debug specifically for LYDEC Global
-        if (key === 'LYDEC Global') {
-          console.log(`LYDEC Global mapping: key="${key}", cell="${cell}", val="${val}", final value="${replacements[cell]}"`);
-        }
+        const val = mapByTagName.get(key);
+        replacements[cell] = val !== undefined ? val : '';
       });
 
-      // Debug: voir ce qu'on va écrire dans le template
-      console.log('replacements:', replacements);
       return replacements;
     };
 
     try {
       const replacements = buildReplacements();
       await generateFromTemplate(
-        '/Electrical Consumption.xlsx', // Chemin vers ton template dans le dossier public
+        '/Electrical Consumption.xlsx',
         replacements,
         `electrical_report_${new Date().toISOString().slice(0, 10)}.xlsx`
       );
@@ -116,8 +84,7 @@ const FinanceReport: React.FC<FinanceReportProps> = ({
       <div className="flex flex-wrap justify-between items-center mb-4 border-b pb-2">
         <h2 className="text-xl font-bold text-brand-dark">Daily Readings Log</h2>
         <div className="flex items-center space-x-2 mt-2 sm:mt-0">
-           <button
-            // L'onClick appelle maintenant la nouvelle fonction
+          <button
             onClick={handleDownloadSheet}
             className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-brand-primary hover:bg-brand-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-secondary transition-colors"
           >
@@ -125,7 +92,7 @@ const FinanceReport: React.FC<FinanceReportProps> = ({
           </button>
         </div>
       </div>
-      
+
       <div className="overflow-x-auto">
         <ReportTable readings={readings} tags={tags} />
       </div>
